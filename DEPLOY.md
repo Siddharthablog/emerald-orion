@@ -101,6 +101,7 @@ Vercel is the creators of Next.js, so it offers the best experience.
 2.  Click **"Add New..."** -> **"Project"**.
 3.  Find your `emerald-orion` repository and click **Import**.
 4.  Leave all settings as default (Framework Preset: Next.js).
+    > **Note:** If you get an error saying "The specified name is already used", simply change the **Project Name** field to something unique (e.g., `emerald-orion-v2` or `emerald-orion-yourname`).
 5.  Click **Deploy**.
 6.  Wait ~1 minute. Your site is now live!
 
@@ -145,4 +146,46 @@ If you specifically want to use Google Cloud (GCP), Cloud Run is the best "Serve
     ```
 
 5.  **Done!** The command will output a URL where your app is live.
+
+### Part 4: Internal Server Deployment (IP Address)
+
+If you are deploying to a company server (e.g., `192.168.1.50`), follow these steps.
+
+**Prerequisites:**
+-   SSH access to the server.
+-   Docker installed on the server (Recommended).
+
+**Steps:**
+
+1.  **Connect to the Server:**
+    ```bash
+    ssh user@YOUR_SERVER_IP
+    ```
+
+2.  **Get the Code:**
+    *   **Option A (Git):** If the server has internet access:
+        ```bash
+        git clone https://github.com/YOUR_USERNAME/emerald-orion.git
+        cd emerald-orion
+        ```
+    *   **Option B (SCP):** If no internet, copy files from your machine:
+        ```bash
+        # Run this from your LOCAL machine, not the server
+        scp -r . user@YOUR_SERVER_IP:~/emerald-orion
+        ```
+
+3.  **Run with Docker:**
+    ```bash
+    cd emerald-orion
+    docker build -t emerald-orion .
+    docker run -d -p 3000:3000 --restart always --name emerald-orion emerald-orion
+    ```
+
+4.  **Access the App:**
+    -   Open your browser and go to: `http://YOUR_SERVER_IP:3000`
+    -   **Troubleshooting:** If it doesn't load, check the firewall:
+        ```bash
+        # Ubuntu/Debian
+        sudo ufw allow 3000
+        ```
 
